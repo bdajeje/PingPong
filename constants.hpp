@@ -20,10 +20,13 @@
 
 #define PLAYER_DEFAULT_WIDTH 25
 #define PLAYER_DEFAULT_HEIGHT 150
+#define PLAYER_DEFAULT_SPEED 0.3 // pixel / ms
 
 #define BALL_RADIUS 15
 #define BALL_COLOR_R 200
 #define BALL_COLOR_G 200
 #define BALL_COLOR_B 100
+#define BALL_DEFAULT_SPEED 0.3 // pixel / ms
+#define BALL_RANDOM_START_SPEED 0.1  // pixel / ms
 
 #endif // CONSTANTS_HPP

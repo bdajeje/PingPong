@@ -11,10 +11,18 @@ class Ball final : public Drawable
 
     void draw(sf::RenderWindow& window);
 
+    inline float radius() const { return _sprite.getRadius(); }
+
+  private:
+
+    void updatePosition();
+    void initSpeed();
+
   private:
 
     sf::Vector2f _speeds;
     sf::CircleShape _sprite;
+    sf::Clock _last_move; /* Last movement time */
 };
 
 #endif // BALL_HPP
