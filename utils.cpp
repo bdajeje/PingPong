@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 
@@ -14,13 +15,28 @@ float rand(float min, float max)
 }
 
 // Is a point inside a straight rectangle
-//bool pointInRectangle(const sf::Vector2f& destination, const sf::Vector2f& position, const sf::Vector2f& size)
-//{
-//  if( destination.x < position.x          ||
-//      destination.x > position.x + size.x ||
-//      destination.y < position.y          ||
-//      destination.y > position.y + size.y )
-//    return false;
+bool collide(const sf::Vector2f& destination, const sf::FloatRect& rectangle)
+{
+  if( destination.x < rectangle.left                   ||
+      destination.x > rectangle.left + rectangle.width ||
+      destination.y < rectangle.top                    ||
+      destination.y > rectangle.top + rectangle.height )
+    return false;
 
-//  return true;
-//}
+  return true;
+}
+
+void resize( sf::Sprite& texture, sf::Vector2f size )
+{
+  sf::Vector2f scale;
+  const auto& bounds = texture.getGlobalBounds();
+  scale.x = (bounds.width != 0) ? size.x / bounds.width : 1.0;
+  scale.y = (bounds.height != 0) ? size.y / bounds.height : 1.0;
+  texture.setScale( scale );
+}
+
+sf::FloatRect enlarge(const sf::Vector2f& position, const sf::Vector2f& size, float raise)
+{
+  return sf::FloatRect{ position.x - raise, position.y - raise,
+                        size.x + raise * 2, size.y + raise * 2 };
+}

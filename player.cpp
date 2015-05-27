@@ -4,18 +4,24 @@
 
 #include "constants.hpp"
 
-Player::Player(const std::string& name, Position position)
+Player::Player(const std::string& name, Position side)
   : _name {name}
   , _sprite {sf::Vector2f(PLAYER_DEFAULT_WIDTH, PLAYER_DEFAULT_HEIGHT)}
+  , _side {side}
 {
-  resetPosition(position);
+  reset();
+}
+
+void Player::reset()
+{
+  resetPosition();
   resetSpeed();
 }
 
-void Player::resetPosition(Position position)
+void Player::resetPosition()
 {
   static const float honrizontal_padding = 40;
-  _sprite.setPosition( ( position == Position::Left ) ? honrizontal_padding : WINDOW_WIDTH - honrizontal_padding - _sprite.getSize().x,
+  _sprite.setPosition( ( _side == Position::Left ) ? honrizontal_padding : WINDOW_WIDTH - honrizontal_padding - _sprite.getSize().x,
                        HEADER_HEIGHT + ((WINDOW_HEIGHT - HEADER_HEIGHT) - _sprite.getSize().y) / 2 );
 }
 
@@ -29,17 +35,17 @@ void Player::draw(sf::RenderWindow& window)
   window.draw(_sprite);
 }
 
-void Player::goUp(bool moving)
+void Player::goUp(bool moving, float elapsed_time)
 {
-  setMove(Movement::Up, moving);
+  setMove(Movement::Up, moving, elapsed_time);
 }
 
-void Player::goDown(bool moving)
+void Player::goDown(bool moving, float elapsed_time)
 {
-  setMove(Movement::Down, moving);
+  setMove(Movement::Down, moving, elapsed_time);
 }
 
-void Player::setMove(Movement direction, bool moving)
+void Player::setMove(Movement direction, bool moving, float elapsed_time)
 {
   if( !moving )
   {
@@ -49,7 +55,6 @@ void Player::setMove(Movement direction, bool moving)
   }
   else if( _direction != direction )
   {
-    _last_move.restart();
     _direction = direction;
     return;
   }
@@ -58,7 +63,7 @@ void Player::setMove(Movement direction, bool moving)
   const auto& position = _sprite.getPosition();
 
   // Calcule distance done since last move
-  auto distance = _speed * _last_move.restart().asMilliseconds();
+  auto distance = _speed * elapsed_time;
   if(direction == Movement::Up)
     distance = -distance;
 

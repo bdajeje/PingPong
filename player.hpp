@@ -1,16 +1,16 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include <SFML/Graphics.hpp>
+
 #include <memory>
 #include <string>
-
-#include "drawable.hpp"
 
 enum class Position {Left, Right};
 
 enum class Movement {None, Up, Down};
 
-class Player final : public Drawable
+class Player final
 {
   public:
 
@@ -18,27 +18,35 @@ class Player final : public Drawable
 
     const std::string& name() const { return _name; }
     unsigned int score() const { return _score; }
+    const sf::Vector2f& position() const { return _sprite.getPosition(); }
+    const sf::Vector2f& size() const { return _sprite.getSize(); }
+    sf::FloatRect bounds() const { return _sprite.getLocalBounds(); }
 
-    void resetPosition(Position position);
-    void resetSpeed();
+    float upperLimit() const { return position().y; }
+    float lowerLimit() const { return position().y + size().y; }
+    float leftLimit() const { return position().x; }
+    float rightLimit() const { return position().x + size().x; }
+
     void raiseScore() { _score++; }
-
-    void goUp(bool moving);
-    void goDown(bool moving);
+    void reset();
+    void goUp(bool moving, float elapsed_time);
+    void goDown(bool moving, float elapsed_time);
 
     void draw(sf::RenderWindow& window);
 
   private:
 
+    void resetSpeed();
+    void resetPosition();
     inline float height() const { return _sprite.getGlobalBounds().height; }
-    void setMove(Movement direction, bool moving);
+    void setMove(Movement direction, bool moving, float elapsed_time);
 
   private:
 
     std::string _name;
     sf::RectangleShape _sprite;
+    Position _side;
     unsigned int _score {0};
-    sf::Clock _last_move; /* Last movement time */
     float _speed; /* Current speed */
     Movement _direction {Movement::None};
 };

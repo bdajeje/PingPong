@@ -3,7 +3,10 @@
 
 #include <string>
 
-#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+
+enum class State {Wait, Pause, Run, Winner};
+enum class Edge {Top, Bottom, Left, Right, None};
 
 /*! Takes a input string and ensure it ends with a '/'
  *  \param filepath - to update
@@ -13,6 +16,10 @@ std::string ensureDirEnd(std::string filepath);
 
 float rand(float min, float max);
 
-bool isColliding(const sf::Vector2f& destination, const sf::Vector2f& position, const sf::Vector2f& size);
+bool collide(const sf::Vector2f& destination, const sf::FloatRect& rectangle);
+
+sf::FloatRect enlarge(const sf::Vector2f& position, const sf::Vector2f& size, float raise);
+
+void resize(sf::Sprite& texture, sf::Vector2f size );
 
 #endif // UTILS_HPP

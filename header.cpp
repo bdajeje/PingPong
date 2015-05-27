@@ -1,7 +1,11 @@
 #include "header.hpp"
 
+#include <iostream>
+
 #include "constants.hpp"
 #include "fonts.hpp"
+#include "sounds.hpp"
+#include "textures.hpp"
 
 Header::Header(PlayerPtr& player_1, PlayerPtr& player_2)
   : _player_1 {player_1}
@@ -30,9 +34,42 @@ Header::Header(PlayerPtr& player_1, PlayerPtr& player_2)
   // Position scores
   positionScore(_player_score_1, Position::Left);
   positionScore(_player_score_2, Position::Right);
+
+  // Intro text
+  _intro_text.setFont( *Fonts::get(fonts::Default) );
+  _intro_text.setCharacterSize( HEADER_INTRO_SIZE );
+  _intro_text.setColor( sf::Color{HEADER_INTRO_COLOR_R, HEADER_INTRO_COLOR_G, HEADER_INTRO_COLOR_B} );
+  _intro_text.setString("Press space to start");
+  _intro_text.setPosition((WINDOW_WIDTH - _intro_text.getLocalBounds().width) / 2, (HEADER_HEIGHT - _intro_text.getLocalBounds().height) / 2);
+
+  // Pause text
+  _pause_text.setFont( *Fonts::get(fonts::Default) );
+  _pause_text.setCharacterSize( HEADER_PAUSE_SIZE );
+  _pause_text.setColor( sf::Color{HEADER_PAUSE_COLOR_R, HEADER_PAUSE_COLOR_G, HEADER_PAUSE_COLOR_B} );
+  _pause_text.setString("PAUSE");
+  _pause_text.setPosition((WINDOW_WIDTH - _pause_text.getLocalBounds().width) / 2, (HEADER_HEIGHT - _pause_text.getLocalBounds().height) / 2 );
+
+  // Winner text
+  _winner_text.setFont( *Fonts::get(fonts::Default) );
+  _winner_text.setCharacterSize( HEADER_WINNER_SIZE );
+  _winner_text.setColor( sf::Color{HEADER_WINNER_COLOR_R, HEADER_WINNER_COLOR_G, HEADER_WINNER_COLOR_B} );
+
+  // Sound icons
+  _icon_sound_off.setTexture( Textures::instance()->get(Texture::IconSoundOff) );
+  _icon_sound_on.setTexture( Textures::instance()->get(Texture::IconSoundOn) );
+  resize( _icon_sound_off, sf::Vector2f{30, 30} );
+  resize( _icon_sound_on, sf::Vector2f{30, 30} );
+  _icon_sound_off.setPosition( (WINDOW_WIDTH - _icon_sound_off.getGlobalBounds().width) / 2, SOUNDS_ICON_Y );
+  _icon_sound_on.setPosition( _icon_sound_off.getPosition() );
 }
 
-void Header::draw(sf::RenderWindow& window)
+void Header::setWinner(const PlayerPtr& winner)
+{
+  _winner_text.setString( winner->name() + " wins !" );
+  _winner_text.setPosition((WINDOW_WIDTH - _winner_text.getLocalBounds().width) / 2, (WINDOW_HEIGHT - _winner_text.getLocalBounds().height) / 2 );
+}
+
+void Header::draw(sf::RenderWindow& window, State state)
 {
   // Border
   window.draw( _border );
@@ -46,6 +83,20 @@ void Header::draw(sf::RenderWindow& window)
   _player_score_2.setString( std::to_string(_player_2->score()) );
   window.draw( _player_score_1 );
   window.draw( _player_score_2 );
+
+  // Sounds icon
+  if( Sounds::instance()->isSoundAuthorized() )
+    window.draw( _icon_sound_on );
+  else
+    window.draw( _icon_sound_off );
+
+  // Pause text
+  if( state == State::Pause )
+    window.draw(_pause_text);
+  else if( state == State::Wait )
+    window.draw(_intro_text);
+  else if( state == State::Winner )
+    window.draw( _winner_text );
 }
 
 void Header::positionScore(sf::Text& score_text, Position position)
