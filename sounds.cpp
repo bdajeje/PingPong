@@ -14,16 +14,16 @@ const std::map<Sound, std::string> Sounds::_sounds_filenames = {
   { Sound::PlayerHit, "ping.wav" },
 };
 
-void Sounds::init(const std::string& path)
+void Sounds::init(const std::string& sounds_path)
 {
   if(_instance)
     return;
 
-  _instance.reset( new Sounds(path) );
+  _instance.reset( new Sounds(sounds_path) );
 }
 
-Sounds::Sounds(const std::string& path)
-  : _path {ensureDirEnd(path)}
+Sounds::Sounds(const std::string& sounds_path)
+  : _sounds_path {ensureDirEnd(sounds_path)}
 {
   loadSounds();
 }
@@ -43,14 +43,30 @@ void Sounds::load(Sound key, const std::string& filename)
 
   // Load sound
   sf::SoundBuffer& buffer = _buffers[key];
-  if(!buffer.loadFromFile( _path + filename ))
+  if(!buffer.loadFromFile( _sounds_path + filename ))
   {
-    std::cerr << "Can't load sound: " << _path + filename << std::endl;
+    std::cerr << "Can't load sound: " << _sounds_path + filename << std::endl;
     return;
   }
 
   sf::Sound& sound = _loaded_sounds[key];
   sound.setBuffer(buffer);
+}
+
+sf::Time Sounds::play(const std::string& music_path)
+{
+  if( !_is_music )
+    return {};
+
+  auto found = _loaded_musics.find(music_path);
+  if(found == _loaded_musics.end())
+  {
+    _loaded_musics[music_path].openFromFile( music_path );
+    found = _loaded_musics.find(music_path);
+  }
+
+  found->second.play();
+  return found->second.getDuration();
 }
 
 void Sounds::play(Sound key)
@@ -75,4 +91,19 @@ void Sounds::toggleSound()
     for( auto& it : _loaded_sounds )
       it.second.stop();
   }
+}
+
+void Sounds::toggleMusic()
+{
+  _is_music = !_is_music;
+  const float volume = _is_music ? 100 : 0;
+
+  // Update all music volumes
+  for( auto& it : _loaded_musics )
+    setMusicsVolume(it.second, volume);
+}
+
+void Sounds::setMusicsVolume(sf::Music& music, float volume)
+{
+  music.setVolume(volume);
 }

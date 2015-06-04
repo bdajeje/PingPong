@@ -19,6 +19,7 @@ class Header final
     void positionScore(sf::Text& score_text, Position position);
     void setNameStyle(sf::Text& name);
     void setScoreStyle(sf::Text& score);
+    void setIcon(sf::Sprite& sprite, const sf::Texture& texture, const sf::Vector2f& size, const sf::Vector2f& position);
 
   private:
 
@@ -35,6 +36,8 @@ class Header final
     sf::RectangleShape _border;
     sf::Sprite _icon_sound_on;
     sf::Sprite _icon_sound_off;
+    sf::Sprite _icon_music_off;
+    sf::Sprite _icon_music_on;
 };
 
 #endif // HEADER_HPP

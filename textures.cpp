@@ -18,6 +18,8 @@ Textures::Textures(const std::string& path)
 {
   _textures[Texture::IconSoundOff].loadFromFile( path + "sounds_off.png" );
   _textures[Texture::IconSoundOn].loadFromFile( path + "sounds_on.png" );
+  _textures[Texture::IconMusicOn].loadFromFile( path + "music_on.png" );
+  _textures[Texture::IconMusicOff].loadFromFile( path + "music_off.png" );
 }
 
 const sf::Texture& Textures::get(Texture key) const

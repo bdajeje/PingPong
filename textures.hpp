@@ -8,7 +8,8 @@
 #include <SFML/Graphics.hpp>
 
 enum class Texture {
-  IconSoundOn, IconSoundOff
+  IconSoundOn, IconSoundOff,
+  IconMusicOn, IconMusicOff
 };
 
 class Textures final

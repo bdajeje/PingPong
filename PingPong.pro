@@ -10,9 +10,13 @@ SOURCES += main.cpp \
     utils.cpp \
     ball.cpp \
     sounds.cpp \
-    textures.cpp
+    textures.cpp \
+    jukebox.cpp \
+    files.cpp
 
-LIBS += -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lboost_filesystem -lboost_regex -lboost_system
+LIBS += -pthread
+LIBS += -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+LIBS += -lboost_filesystem -lboost_regex -lboost_system
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -24,4 +28,6 @@ HEADERS += \
     utils.hpp \
     ball.hpp \
     sounds.hpp \
-    textures.hpp
+    textures.hpp \
+    jukebox.hpp \
+    files.hpp

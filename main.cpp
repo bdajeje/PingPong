@@ -12,6 +12,7 @@
 #include "player.hpp"
 #include "sounds.hpp"
 #include "textures.hpp"
+#include "jukebox.hpp"
 
 Sound randomEndSound()
 {
@@ -51,6 +52,7 @@ int main()
 
   State game_state { State::Wait };
   sf::Clock clock;
+  Jukebox::start("resources/musics/");
 
   while(window.isOpen())
   {
@@ -84,8 +86,10 @@ int main()
               clock.restart();
             }
           }
-          else if( event.key.code == sf::Keyboard::M )
+          else if( event.key.code == sf::Keyboard::N )
             Sounds::instance()->toggleSound();
+          else if( event.key.code == sf::Keyboard::M )
+            Sounds::instance()->toggleMusic();
           break;
         }
         default: break;

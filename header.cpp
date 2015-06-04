@@ -40,14 +40,14 @@ Header::Header(PlayerPtr& player_1, PlayerPtr& player_2)
   _intro_text.setCharacterSize( HEADER_INTRO_SIZE );
   _intro_text.setColor( sf::Color{HEADER_INTRO_COLOR_R, HEADER_INTRO_COLOR_G, HEADER_INTRO_COLOR_B} );
   _intro_text.setString("Press space to start");
-  _intro_text.setPosition((WINDOW_WIDTH - _intro_text.getLocalBounds().width) / 2, (HEADER_HEIGHT - _intro_text.getLocalBounds().height) / 2);
+  _intro_text.setPosition((WINDOW_WIDTH - _intro_text.getLocalBounds().width) / 2, HEADER_INTRO_Y);
 
   // Pause text
   _pause_text.setFont( *Fonts::get(fonts::Default) );
   _pause_text.setCharacterSize( HEADER_PAUSE_SIZE );
   _pause_text.setColor( sf::Color{HEADER_PAUSE_COLOR_R, HEADER_PAUSE_COLOR_G, HEADER_PAUSE_COLOR_B} );
   _pause_text.setString("PAUSE");
-  _pause_text.setPosition((WINDOW_WIDTH - _pause_text.getLocalBounds().width) / 2, (HEADER_HEIGHT - _pause_text.getLocalBounds().height) / 2 );
+  _pause_text.setPosition((WINDOW_WIDTH - _pause_text.getLocalBounds().width) / 2, HEADER_PAUSE_Y );
 
   // Winner text
   _winner_text.setFont( *Fonts::get(fonts::Default) );
@@ -55,12 +55,21 @@ Header::Header(PlayerPtr& player_1, PlayerPtr& player_2)
   _winner_text.setColor( sf::Color{HEADER_WINNER_COLOR_R, HEADER_WINNER_COLOR_G, HEADER_WINNER_COLOR_B} );
 
   // Sound icons
-  _icon_sound_off.setTexture( Textures::instance()->get(Texture::IconSoundOff) );
-  _icon_sound_on.setTexture( Textures::instance()->get(Texture::IconSoundOn) );
-  resize( _icon_sound_off, sf::Vector2f{30, 30} );
-  resize( _icon_sound_on, sf::Vector2f{30, 30} );
-  _icon_sound_off.setPosition( (WINDOW_WIDTH - _icon_sound_off.getGlobalBounds().width) / 2, SOUNDS_ICON_Y );
-  _icon_sound_on.setPosition( _icon_sound_off.getPosition() );
+  sf::Vector2f size{30, 30};
+  const float x = WINDOW_WIDTH / 2;
+  sf::Vector2f position{x, SOUNDS_ICON_Y};
+  setIcon(_icon_sound_off, Textures::instance()->get(Texture::IconSoundOff), size, position);
+  setIcon(_icon_sound_on, Textures::instance()->get(Texture::IconSoundOn), size, position);
+  position.y = MUSIC_ICON_Y;
+  setIcon(_icon_music_off, Textures::instance()->get(Texture::IconMusicOff), size, position);
+  setIcon(_icon_music_on, Textures::instance()->get(Texture::IconMusicOn), size, position);
+}
+
+void Header::setIcon(sf::Sprite& sprite, const sf::Texture& texture, const sf::Vector2f& size, const sf::Vector2f& position)
+{
+  sprite.setTexture( texture );
+  resize( sprite, size );
+  sprite.setPosition( position.x - sprite.getGlobalBounds().width / 2, position.y );
 }
 
 void Header::setWinner(const PlayerPtr& winner)
@@ -89,6 +98,12 @@ void Header::draw(sf::RenderWindow& window, State state)
     window.draw( _icon_sound_on );
   else
     window.draw( _icon_sound_off );
+
+  // Music icon
+  if( Sounds::instance()->isMusicAuthorized() )
+    window.draw( _icon_music_on );
+  else
+    window.draw( _icon_music_off );
 
   // Pause text
   if( state == State::Pause )
