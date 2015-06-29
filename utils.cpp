@@ -9,9 +9,9 @@ std::string ensureDirEnd(std::string filepath)
   return (filepath.back() == '/') ? filepath : filepath + '/';
 }
 
-float rand(float min, float max)
+bool doesCircleCollideRectangle(const sf::CircleShape& circle, const sf::Sprite& sprite)
 {
-  return min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max-min)));
+  return collide( circle.getPosition(), enlarge(sprite.getPosition(), sprite.getGlobalBounds(), circle.getRadius()) );
 }
 
 // Is a point inside a straight rectangle
@@ -35,8 +35,13 @@ void resize( sf::Sprite& texture, sf::Vector2f size )
   texture.setScale( scale );
 }
 
-sf::FloatRect enlarge(const sf::Vector2f& position, const sf::Vector2f& size, float raise)
+sf::FloatRect enlarge(const sf::Vector2f& position, const sf::FloatRect& rectangle, float raise)
 {
   return sf::FloatRect{ position.x - raise, position.y - raise,
-                        size.x + raise * 2, size.y + raise * 2 };
+                        rectangle.width + raise * 2, rectangle.height + raise * 2 };
+}
+
+sf::FloatRect enlarge(const sf::RectangleShape& rectangle, float raise)
+{
+  return enlarge( rectangle.getPosition(), rectangle.getGlobalBounds(), raise );
 }

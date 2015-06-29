@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+#include "power_block.hpp"
+
 enum class Position {Left, Right};
 
 enum class Movement {None, Up, Down};
@@ -21,6 +23,7 @@ class Player final
     const sf::Vector2f& position() const { return _sprite.getPosition(); }
     const sf::Vector2f& size() const { return _sprite.getSize(); }
     sf::FloatRect bounds() const { return _sprite.getLocalBounds(); }
+    const sf::RectangleShape& sprite() const { return _sprite; }
 
     float upperLimit() const { return position().y; }
     float lowerLimit() const { return position().y + size().y; }
@@ -31,6 +34,7 @@ class Player final
     void reset();
     void goUp(bool moving, float elapsed_time);
     void goDown(bool moving, float elapsed_time);
+    void gainPower(std::shared_ptr<PowerBlock>& power_block) { _power_block = power_block; }
 
     void draw(sf::RenderWindow& window);
 
@@ -49,6 +53,9 @@ class Player final
     unsigned int _score {0};
     float _speed; /* Current speed */
     Movement _direction {Movement::None};
+
+    /*! Currently owned power block by player */
+    std::shared_ptr<PowerBlock> _power_block;
 };
 
 typedef std::shared_ptr<Player> PlayerPtr;

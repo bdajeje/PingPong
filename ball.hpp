@@ -11,10 +11,16 @@ class Ball final
     Ball();
 
     void draw(sf::RenderWindow& window);
-    PlayerPtr updatePosition(float elapsed_time, const PlayerPtr& player_1, const PlayerPtr& player_2);
+
+    /*!
+     * \returns first player : winner or nullptr
+     *          second player: touched player or nullptr
+     */
+    std::pair<PlayerPtr,PlayerPtr> updatePosition(float elapsed_time, const PlayerPtr& player_1, const PlayerPtr& player_2);
 
     inline float radius() const { return _sprite.getRadius(); }
     const sf::Vector2f& position() const { return _sprite.getPosition(); }
+    const sf::CircleShape& sprite() const { return _sprite; }
 
     float upperLimit() const { return position().y - radius(); }
     float lowerLimit() const { return position().y + radius(); }

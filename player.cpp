@@ -20,8 +20,7 @@ void Player::reset()
 
 void Player::resetPosition()
 {
-  static const float honrizontal_padding = 40;
-  _sprite.setPosition( ( _side == Position::Left ) ? honrizontal_padding : WINDOW_WIDTH - honrizontal_padding - _sprite.getSize().x,
+  _sprite.setPosition( ( _side == Position::Left ) ? PLAYER_HORIZONTAL_PADDING : WINDOW_WIDTH - PLAYER_HORIZONTAL_PADDING - _sprite.getSize().x,
                        HEADER_HEIGHT + ((WINDOW_HEIGHT - HEADER_HEIGHT) - _sprite.getSize().y) / 2 );
 }
 

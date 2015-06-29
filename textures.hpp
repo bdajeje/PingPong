@@ -9,7 +9,8 @@
 
 enum class Texture {
   IconSoundOn, IconSoundOff,
-  IconMusicOn, IconMusicOff
+  IconMusicOn, IconMusicOff,
+  PowerMinimize, PowerMaximize, PowerDouble, PowerTripple, PowerCloack
 };
 
 class Textures final

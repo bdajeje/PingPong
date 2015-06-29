@@ -14,11 +14,18 @@ enum class Edge {Top, Bottom, Left, Right, None};
  */
 std::string ensureDirEnd(std::string filepath);
 
-float rand(float min, float max);
+template <class T>
+T rand(T min, T max)
+{
+  return min + static_cast<T> (rand()) /(static_cast<T> (RAND_MAX/(max-min)));
+}
 
 bool collide(const sf::Vector2f& destination, const sf::FloatRect& rectangle);
 
-sf::FloatRect enlarge(const sf::Vector2f& position, const sf::Vector2f& size, float raise);
+bool doesCircleCollideRectangle(const sf::CircleShape& circle, const sf::Sprite& sprite);
+
+sf::FloatRect enlarge(const sf::Vector2f& position, const sf::FloatRect& rectangle, float raise);
+sf::FloatRect enlarge(const sf::RectangleShape& rectangle, float raise);
 
 void resize(sf::Sprite& texture, sf::Vector2f size );
 

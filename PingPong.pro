@@ -12,7 +12,15 @@ SOURCES += main.cpp \
     sounds.cpp \
     textures.cpp \
     jukebox.cpp \
-    files.cpp
+    files.cpp \
+    game.cpp \
+    power_block.cpp \
+    power_effects/power_effect.cpp \
+    power_effects/minimize.cpp \
+    power_effects/maximize.cpp \
+    power_effects/double.cpp \
+    power_effects/triple.cpp \
+    power_effects/cloack.cpp
 
 LIBS += -pthread
 LIBS += -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
@@ -30,4 +38,13 @@ HEADERS += \
     sounds.hpp \
     textures.hpp \
     jukebox.hpp \
-    files.hpp
+    files.hpp \
+    game.hpp \
+    power_block.hpp \
+    power_effects/power_effect.hpp \
+    power_effects/power_effects.hpp \
+    power_effects/minimize.hpp \
+    power_effects/maximize.hpp \
+    power_effects/double.hpp \
+    power_effects/triple.hpp \
+    power_effects/cloack.hpp

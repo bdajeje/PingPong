@@ -14,7 +14,7 @@ class Sounds final
 {
   public:
 
-    static void init(const std::string& sounds_path);
+    static void init(const std::string& sounds_path, bool allow_sounds, bool allow_music);
 
     static std::unique_ptr<Sounds>& instance() { return _instance; }
 
@@ -30,7 +30,7 @@ class Sounds final
 
   private:
 
-    Sounds(const std::string& sounds_path);
+    Sounds(const std::string& sounds_path, bool allow_sounds, bool allow_music);
 
     void loadSounds();
     void load(Sound key, const std::string& filename);

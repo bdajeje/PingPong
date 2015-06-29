@@ -36,6 +36,9 @@ void Jukebox::playNextMusic()
     _current_playing = 0;
 
   sf::Time duration = Sounds::instance()->play(_music_filenames[_current_playing]);
+  if(duration == sf::Time::Zero)
+    return;
+
   std::this_thread::sleep_for(std::chrono::microseconds(duration.asMicroseconds()));
   playNextMusic();
 }

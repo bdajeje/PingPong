@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "jukebox.hpp"
 #include "utils.hpp"
 
 std::unique_ptr<Sounds> Sounds::_instance;
@@ -14,18 +15,21 @@ const std::map<Sound, std::string> Sounds::_sounds_filenames = {
   { Sound::PlayerHit, "ping.wav" },
 };
 
-void Sounds::init(const std::string& sounds_path)
+void Sounds::init(const std::string& sounds_path, bool allow_sounds, bool allow_music)
 {
   if(_instance)
     return;
 
-  _instance.reset( new Sounds(sounds_path) );
+  _instance.reset( new Sounds(sounds_path, allow_sounds, allow_music) );
 }
 
-Sounds::Sounds(const std::string& sounds_path)
+Sounds::Sounds(const std::string& sounds_path, bool allow_sounds, bool allow_music)
   : _sounds_path {ensureDirEnd(sounds_path)}
+  , _is_sounds {allow_sounds}
+  , _is_music {allow_music}
 {
   loadSounds();
+  Jukebox::start("resources/musics/");
 }
 
 void Sounds::loadSounds()
@@ -56,7 +60,7 @@ void Sounds::load(Sound key, const std::string& filename)
 sf::Time Sounds::play(const std::string& music_path)
 {
   if( !_is_music )
-    return {};
+    return sf::Time::Zero;
 
   auto found = _loaded_musics.find(music_path);
   if(found == _loaded_musics.end())
